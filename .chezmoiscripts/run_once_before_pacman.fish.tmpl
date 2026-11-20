@@ -1,0 +1,9 @@
+#!/usr/bin/env fish
+
+set --local save_pkglist_hook /etc/pacman.d/hooks/save-pkglist.hook
+set --local pkglist_file {{ joinPath .chezmoi.sourceDir "pkglist" }}
+set --local pkglist_aur_file {{ joinPath .chezmoi.sourceDir "pkglist-aur" }}
+
+if not test -f "$save_pkglist_hook"
+	printf "[Trigger]\nOperation = Install\nOperation = Remove\nType = Package\nTarget = *\n\n[Action]\nDescription = Saving package lists...\nWhen = PostTransaction\nDepends = pacman\nExec = /usr/bin/sh -c \"/usr/bin/pacman --query --quiet --explicit --native > %s && /usr/bin/chown %s: %s && /usr/bin/pacman --query --quiet --explicit --foreign | grep --invert-match '\-debug\$' > %s && /usr/bin/chown %s: %s\"" $pkglist_file $USER $pkglist_file $pkglist_aur_file $USER $pkglist_aur_file | sudo tee $save_pkglist_hook > /dev/null
+end

@@ -1,0 +1,4 @@
+[keybinds]
+"Mod+Return" = { action = "spawn kitty", repeat = false }
+"Mod+X" = "window-close"
+"Mod+F" = { action = "window-toggle-maximize", repeat = false }

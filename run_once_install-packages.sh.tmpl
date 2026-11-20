@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# pacman -Qqen > {{ joinPath .chezmoi.sourceDir "pkglist" }}
+# pacman -Qqem | grep -v '\-debug$' > {{ joinPath .chezmoi.sourceDir "pkglist-aur" }}
+
+# pkglist hash: {{ include "pkglist" | sha256sum }}
+# pkglist-aur hash: {{ include "pkglist-aur" | sha256sum }}
+
+install_paru(){
+	(
+		tmpdir=$(mktemp --directory)
+		trap 'rm --recursive --force "$tmpdir"' EXIT
+
+		git clone https://aur.archlinux.org/paru.git "$tmpdir/paru"
+		cd "$tmpdir/paru"
+		makepkg --syncdeps --install --noconfirm
+	)
+}
+
+sudo pacman --sync --refresh --sysupgrade --needed --noconfirm - < {{ joinPath .chezmoi.sourceDir "pkglist" }}
+
+if ! command -v paru &> /dev/null; then
+	if ! rustc -V &> /dev/null; then
+		rustup default stable
+	fi
+
+	install_paru
+fi
+
+paru --sync --refresh --sysupgrade --aur --needed - < {{ joinPath .chezmoi.sourceDir "pkglist-aur" }}
