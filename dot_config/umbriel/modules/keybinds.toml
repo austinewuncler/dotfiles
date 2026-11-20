@@ -1,4 +1,7 @@
 [keybinds]
 "Mod+Return" = { action = "spawn kitty", repeat = false }
+"Mod+B" = { action = "spawn zen-browser", repeat = false }
 "Mod+X" = "window-close"
 "Mod+F" = { action = "window-toggle-maximize", repeat = false }
+"Mod+H" = "window-focus-left"
+"Mod+L" = "window-focus-right"

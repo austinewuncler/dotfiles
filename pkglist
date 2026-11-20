@@ -4,12 +4,15 @@ bluez
 bluez-utils
 btrfs-progs
 chezmoi
+chipass
 docker
 fish
 git
+github-cli
 greetd
 intel-ucode
 kitty
+libnotify
 linux
 linux-firmware
 mokutil
@@ -19,7 +22,12 @@ noctalia
 noctalia-greeter
 noto-fonts
 noto-fonts-emoji
+openssh
 openssl
+pipewire-alsa
+pipewire-audio
+pipewire-jack
+pipewire-pulse
 pkgfile
 refind
 reflector
@@ -28,3 +36,4 @@ sbsigntools
 sof-firmware
 tuned
 tuned-ppd
+wl-clipboard
