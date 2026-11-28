@@ -1,0 +1,5 @@
+[general]
+	autostart = ["noctalia"]
+
+[include]
+	files = ["modules/layouts.toml", "modules/outputs.toml", "modules/keybinds.toml"]

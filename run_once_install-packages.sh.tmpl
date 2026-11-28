@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# packages hash: {{ include "packages" | sha256sum }}
+# packages-aur hash: {{ include "packages-aur" | sha256sum }}
+
+sudo pacman --sync --refresh --sysupgrade --needed --noconfirm - < {{ joinPath .chezmoi.sourceDir "packages" }}
+
+if ! command -v paru &> /dev/null; then
+	if ! rustc -V &> /dev/null; then
+		rustup default stable
+	fi
+
+	(
+		tmpdir=$(mktemp --directory)
+		trap 'rm --recursive --force "$tmpdir"' EXIT
+
+		git clone "https://aur.archlinux.org/paru.git" "$tmpdir/paru"
+		cd "$tmpdir/paru"
+		makepkg --syncdeps --install --noconfirm
+	)
+fi
+
+paru --sync --refresh --sysupgrade --needed --aur - < {{ joinPath .chezmoi.sourceDir "packages-aur" }}

@@ -1,0 +1,24 @@
+#!/usr/bin/env fish
+
+set --local SAVE_PACKAGES_HOOK_FILE "/etc/pacman.d/hooks/save-packages.hook"
+set --local PACMAN_PATH "/usr/bin/pacman"
+set --local CHOWN_PATH "/usr/bin/chown"
+
+set --local packages_file {{ joinPath .chezmoi.sourceDir "packages" }}
+set --local packages_aur_file {{ joinPath .chezmoi.sourceDir "packages-aur" }}
+
+if not test -f "$SAVE_PACKAGES_HOOK_FILE"
+	printf "[Trigger]
+Operation = Install
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Updating \"%s\" and \"%s\"...
+When = PostTransaction
+Depends = pacman
+Exec = /usr/bin/sh -c \"%s --query --quiet --explicit --native > %s && %s %s: %s && %s --query --quiet --explicit --foreign | grep --invert-match '\-debug\$' > %s && %s %s: %s\""\
+	"$packages_file" "$packages_aur_file" "$PACMAN_PATH" "$packages_file" "$CHOWN_PATH" "$USER" "$packages_file" "$PACMAN_PATH" "$packages_aur_file" "$CHOWN_PATH" "$USER" "$packages_aur_file"\
+	| sudo tee "$SAVE_PACKAGES_HOOK_FILE" > /dev/null
+end

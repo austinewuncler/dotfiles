@@ -1,0 +1,5 @@
+[keybinds]
+	"Mod+B" = { action = "spawn zen-browser", repeat = false }
+	"Mod+Return" = { action = "spawn kitty", repeat = false }
+	"Mod+X" = { action = "window-close", repeat = false }
+	"Mod+F" = { action = "window-toggle-maximize", repeat = false }

@@ -1,0 +1,9 @@
+{{- $gitEmail := promptStringOnce . "gitEmail" "Git Email" -}}
+{{- $gitName := promptStringOnce . "gitName" "Git Name" -}}
+
+[data.git]
+	email = {{ $gitEmail | quote }}
+	name = {{ $gitName | quote }}
+
+[git]
+	autoAdd = true
